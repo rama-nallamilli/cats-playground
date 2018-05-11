@@ -10,6 +10,17 @@ object ErrorAccumulationValidation {
 
   type ValidationResult[A] = ValidatedNel[ValidationError, A]
 
+  def validate(name: String,
+               age: String,
+               address: String,
+               hair: String): ValidationResult[User] = {
+    (validateName(name),
+      validateAge(age),
+      validateAddress(address),
+      validateHair(hair)).mapN(User)
+
+  }
+
   private def validateName(name: String): ValidationResult[String] =
     if (name.matches("^[a-zA-Z0-9]+$"))
       name.validNel
@@ -32,14 +43,4 @@ object ErrorAccumulationValidation {
   private def validateHair(hair: String): ValidationResult[String] =
     hair.validNel
 
-  def validate(name: String,
-               age: String,
-               address: String,
-               hair: String): ValidationResult[User] = {
-    (validateName(name),
-     validateAge(age),
-     validateAddress(address),
-     validateHair(hair)).mapN(User)
-
-  }
 }

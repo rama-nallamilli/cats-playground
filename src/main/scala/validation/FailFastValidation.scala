@@ -4,6 +4,17 @@ import scala.util.{Failure, Success, Try}
 
 object FailFastValidation {
 
+  def validate(name: String, age: String, address: String, hair: String): Either[ValidationError, User] = {
+
+    for {
+      validName    <- validateName(name)
+      validAge     <- validateAge(age)
+      validAddress <- validateAddress(address)
+      validHair    <- validateHair(hair)
+    } yield User(validName, validAge, validAddress, validHair)
+
+  }
+
   private def validateName(name: String): Either[ValidationError, String] =
     if (name.matches("^[a-zA-Z0-9]+$"))
       Right(name)
@@ -24,14 +35,4 @@ object FailFastValidation {
 
   private def validateHair(hair: String): Either[ValidationError, String] = Right(hair)
 
-  def validate(name: String, age: String, address: String, hair: String): Either[ValidationError, User] = {
-
-    for {
-      validName    <- validateName(name)
-      validAge     <- validateAge(age)
-      validAddress <- validateAddress(address)
-      validHair    <- validateHair(hair)
-    } yield User(validName, validAge, validAddress, validHair)
-
-  }
 }
